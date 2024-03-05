@@ -1,3 +1,5 @@
+# 演示效果
+https://www.bilibili.com/video/BV1w6421u7JX
 # 项目环境
 
 本项目为基于STM32及OpenMV的云台追踪装置，在keil和OpenMV IDE上进行开发
