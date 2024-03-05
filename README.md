@@ -6,7 +6,7 @@ https://www.bilibili.com/video/BV1w6421u7JX
 
 # OpenMV程序思路
 
-openmv程序见文件openmv.py，通过OpenMV对被测物体检测，使用绿色瓶盖作为被测物体，通过查找最大色块程序检测目标，并在图像上绘制目标的轮廓和质心，并将质心的坐标通过串口传给stm32
+我使用的是OpenMV4 H7 R2板子,openmv程序见文件openmv.py，通过OpenMV对被测物体检测，使用绿色瓶盖作为被测物体，通过查找最大色块程序检测目标，并在图像上绘制目标的轮廓和质心，并将质心的坐标通过串口传给stm32
 
 # STM32F103C8T6程序思路
 
