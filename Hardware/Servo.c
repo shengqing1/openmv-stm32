@@ -32,21 +32,7 @@ void Servo_SetAngle2(float Angle)
 	PWM_SetCompare2(Angle / 180 * 2000 + 500);	//设置占空比
 												//将角度线性变换，对应到舵机要求的占空比范围上
 }
-// 控制舵机角度的函数（考虑PID输出）  
-void Servo_SetAngleWithPID1(float Angle, PID_Controller *pid) {  
-    // 将PID输出限制在舵机角度范围内  
-    Angle = (Angle > MAX_ANGLE) ? MAX_ANGLE : ((Angle < MIN_ANGLE) ? MIN_ANGLE : Angle);  
-    // 计算PWM值并设置舵机  
-    PWM_SetCompare1((Angle / 180.0f * 2000.0f) + 500);  
-    pid->Output = Angle; // 更新PID控制器的输出值  
-}  
-void Servo_SetAngleWithPID2(float Angle, PID_Controller *pid) {  
-    // 将PID输出限制在舵机角度范围内  
-    Angle = (Angle > MAX_ANGLE) ? MAX_ANGLE : ((Angle < MIN_ANGLE) ? MIN_ANGLE : Angle);  
-    // 计算PWM值并设置舵机  
-    PWM_SetCompare2((Angle / 180.0f * 2000.0f) + 500);  
-    pid->Output = Angle; // 更新PID控制器的输出值  
-}  
+
 uint16_t PWM_GetCompare1()  
 {  
     return (uint16_t)(TIM2->CCR1);  
@@ -97,5 +83,6 @@ void camera_move_increment(float x, float y) {
 //target_x,target_y-希望对准的坐标
 //camera_x,camera_y-图像中心的坐标
 void camera_move_to_target_close_loop(int target_x, int target_y, int laser_x, int laser_y) {  
-	camera_move_increment((float)(target_x - laser_x)*0.01, (float)(target_y - laser_y)*0.01);
+	camera_move_increment((float)(target_x - laser_x)*0.01, (float)(target_y - laser_y)*0.01);//只有P控制器
+	//camera_move_increment((float)PID_Compute(&panPID,(target_x - laser_x)), (float)PID_Compute(&tiltPID,(target_y - laser_y)));//PID控制器
 }
