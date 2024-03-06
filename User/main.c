@@ -34,10 +34,11 @@ int main(void)
 	uart_init(115200);
 	//Serial_Init();		//串口初始化
   // 初始化PID控制器  
-  PID_Init(&panPID,  0.03f, 0.001f, 0.0f); // 水平轴PID参数需要根据实际情况调整  
-  PID_Init(&tiltPID, 0.03f, 0.001f, 0.0f); // 垂直轴PID参数需要根据实际情况调整  
-	PID_SetSetpoint(&panPID,CAMERA_WIDTH/2);
-	PID_SetSetpoint(&tiltPID,CAMERA_HEIGHT/2);
+	//目前程序中没用的该PID结构体，仅仅使用P控制器控制舵机，但保留了PID接口，可根据实际情况修改
+  PID_Init(&panPID,  0.01f, 0.001f, 0.0f); // 水平轴PID参数需要根据实际情况调整  
+  PID_Init(&tiltPID, 0.01f, 0.001f, 0.0f); // 垂直轴PID参数需要根据实际情况调整  
+	PID_SetSetpoint(&panPID,0);
+	PID_SetSetpoint(&tiltPID,0);
 	Angle=90;
 	while (1)
 	{
@@ -48,45 +49,6 @@ int main(void)
 		ballY=(uint8_t)data2;
     float deltaX = ballX - CAMERA_WIDTH / 2;  
     float deltaY = ballY - CAMERA_HEIGHT / 2;  
-		//deltaX=deltaX*0.01;
-		//deltaY=deltaY*0.01;
-		//deltaX=-deltaX;
-    // 使用PID计算误差（图像像素）  
-    //PID_Compute(&panPID, ballX);  
-    //PID_Compute(&tiltPID, ballY);
 		camera_move_to_target_close_loop(ballX, ballY, CAMERA_WIDTH/2, CAMERA_HEIGHT/2);
-	  // 控制舵机到PID计算出的角度  
-    //Servo_SetAngleWithPID1(panPID.Output, &panPID); // 控制水平轴舵机  
-    //Servo_SetAngleWithPID2(tiltPID.Output, &tiltPID); // 控制垂直轴舵机 
-    // 延时或其他操作 
-		
-		// ...
-		/*
-		if(ballX!=0&&ballY!=0){
-		 if (MIN_ANGLE < servo_rotation_value + deltaX && servo_rotation_value + deltaX < MAX_ANGLE){
-		servo_rotation_value += deltaX; // 更新旋转值
-		 }			 
-		 if (MIN_ANGLE < servo_pitch_value + deltaY && servo_pitch_value + deltaY < 90) { // 假设俯仰值也有类似的有效范围检查  
-        servo_pitch_value += deltaY; // 更新俯仰值   
-    }  
-		
-	  }
-		Servo_SetAngle1(servo_rotation_value);
-		Servo_SetAngle2(servo_pitch_value); // 控制水平轴舵机 
-		Delay_ms(10);*/
-		
-		KeyNum = Key_GetNum();			//获取按键键码
-		if (KeyNum == 1)				//按键1按下
-		{
-			Angle = (uint8_t)data4;				//角度变量自增30
-			if (Angle > 180)			//角度变量超过180后
-			{
-				Angle = 0;				//角度变量归零
-			}
-		}
-		//panPID.Output=tiltPID.Output=Angle;
-		//Servo_SetAngle1(180.0-(float)ballX*180.0/240.0);			//设置舵机的角度为角度变量Servo_SetAngle1(Angle);			//设置舵机的角度为角度变量
-		//Servo_SetAngle2((float)ballY*180.0/240.0);			//设置舵机的角度为角度变量
-		
 	}
 }
