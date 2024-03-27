@@ -1,5 +1,6 @@
 #include "stm32f10x.h"                  // Device header
 #include "Servo.h"
+#include "Delay.h"
 extern PID_Controller panPID; // 水平轴（方位角）的PID控制器  
 extern PID_Controller tiltPID; // 垂直轴（俯仰角）的PID控制器 
 extern float servo_rotation_value;
@@ -22,13 +23,13 @@ void Servo_Init(void)
   */
 void Servo_SetAngle1(float Angle)
 {
-	Angle = (Angle > MAX_ANGLE) ? MAX_ANGLE : ((Angle < MIN_ANGLE) ? MIN_ANGLE : Angle);  
+	Angle = (Angle > MAX_ANGLE_X) ? MAX_ANGLE_X : ((Angle < MIN_ANGLE_X) ? MIN_ANGLE_X : Angle);  
 	PWM_SetCompare1(Angle / 180 * 2000 + 500);	//设置占空比
 												//将角度线性变换，对应到舵机要求的占空比范围上
 }
 void Servo_SetAngle2(float Angle)
 {
-	Angle = (Angle > MAX_ANGLE) ? MAX_ANGLE : ((Angle < MIN_ANGLE) ? MIN_ANGLE : Angle);  
+	Angle = (Angle > MAX_ANGLE_Y) ? MAX_ANGLE_Y : ((Angle < MIN_ANGLE_Y) ? MIN_ANGLE_Y : Angle);  
 	PWM_SetCompare2(Angle / 180 * 2000 + 500);	//设置占空比
 												//将角度线性变换，对应到舵机要求的占空比范围上
 }
@@ -69,11 +70,11 @@ void camera_move_increment(float x, float y) {
         y = -y; // y取反  
     }  
     //在限位内，驱动X轴，Y轴移动 
-    if (MIN_ANGLE < servo_rotation_value + x && servo_rotation_value + x < MAX_ANGLE) {  
+    if (MIN_ANGLE_X < servo_rotation_value + x && servo_rotation_value + x < MAX_ANGLE_X) {  
         servo_rotation_value += x; // 更新旋转值  
 				Servo_SetAngle1(servo_rotation_value); // 控制水平轴舵机  
     }  
-    if (MIN_ANGLE < servo_pitch_value + y && servo_pitch_value + y < MAX_ANGLE) { // 假设俯仰值也有类似的有效范围检查  
+    if (MIN_ANGLE_Y < servo_pitch_value + y && servo_pitch_value + y < MAX_ANGLE_Y) { // 假设俯仰值也有类似的有效范围检查  
         servo_pitch_value += y; // 更新俯仰值  
 				Servo_SetAngle2(servo_pitch_value); // 控制水平轴舵机  
     }
