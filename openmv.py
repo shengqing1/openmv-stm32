@@ -11,6 +11,14 @@ sensor.set_auto_whitebal(False) # turn this off.
 clock = time.clock() # Tracks FPS.
 threshold = (62, 99, -68, -4, 8, 83)
 uart = UART(3, 115200)
+def clamp(x):
+    if x < 0:
+        return 0
+    elif x > 255:
+        return 255
+    else:
+        return x
+
 def find_max(blobs):
     max_size=0
     for blob in blobs:
@@ -31,7 +39,7 @@ while(True):
             print("Center at:", x_coord, y_coord)
             # 在图像上绘制轮廓和质心
             img.draw_rectangle(largest_blob.rect(), color=(255, 0, 0), thickness=2)
-            img.draw_cross(x_coord,y_coord, color=(0, 255, 0), thickness=2)
+            img.draw_cross(clamp(x_coord)，clamp(y_coord), color=(0, 255, 0), thickness=2)
             img_data=bytearray([0x2C,7,x_coord,y_coord,3,4,0X5B])
             uart.write(img_data)
         # 显示处理后的图像
