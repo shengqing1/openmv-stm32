@@ -53,7 +53,7 @@ int main(void)
 			ballX=160;
 			ballY=120;
 		}
-		ballX = (ballX > MAX_X) ? MAX_X : ((ballX < MIN_X) ? MIN_X : ballX);  
+		//ballX = (ballX > MAX_X) ? MAX_X : ((ballX < MIN_X) ? MIN_X : ballX);  
     // 使用PID计算误差（图像像素）  
     x=PID_Compute(&panPID, ballX);  
     y=PID_Compute(&tiltPID, ballY);
